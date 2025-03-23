@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles/login.css">
+</head>
+<body>
+    <div class="background-section" style="background: url('imgs/wp11704456.gif') no-repeat center center/cover;"></div>
+    <div class="container">
+        <img src="imgs/logo.png" alt="Logo" class="logo">
+        <h2>Iniciar Sesión</h2>
+        <form id="loginForm" action="/login" method="POST">
+            <input type="text" name="username" placeholder="Usuario" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Ingresar</button>
+        </form>
+        <p class="register">
+            ¿No tienes cuenta? <a href="register.html">Regístrate aquí</a>
+        </p>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
