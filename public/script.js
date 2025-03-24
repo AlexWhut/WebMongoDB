@@ -12,10 +12,17 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
     const data = await response.json();
 
+    // Limpiar mensajes anteriores
+    document.getElementById('message').style.display = 'none';
+    document.getElementById('errorMessage').style.display = 'none';
+
+    // Mostrar el mensaje de éxito o error
     if (response.ok) {
-        alert(data.message);
-        window.location.href = 'dashboard.html'; // Página a donde se redirige tras el login exitoso
+        document.getElementById('message').textContent = data.message; // Mensaje de éxito
+        document.getElementById('message').style.display = 'block'; // Mostrar mensaje
+        window.location.href = 'dashboard.html'; // Redirigir después del login exitoso
     } else {
-        alert(data.error);
+        document.getElementById('errorMessage').textContent = data.error; // Mensaje de error
+        document.getElementById('errorMessage').style.display = 'block'; // Mostrar mensaje de error
     }
 });
