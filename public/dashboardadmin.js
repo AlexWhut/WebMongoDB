@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Acceso a funcionalidades de administrador (como descargar archivo)
         document.getElementById("downloadBtn").addEventListener("click", () => {
-            window.location.href = "URL_DEL_ARCHIVO"; // Link al archivo en Drive
+            window.location.href = "https://drive.google.com/file/d/1uDNNO2Py0lfBX1b8UWTbKtHt6MnY-W8M/view?usp=sharing"; // Link al archivo en Drive
         });
     } else {
         window.location.href = "index.html"; // Redirigir si no es admin
