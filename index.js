@@ -31,7 +31,8 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 // Modelo de Usuario
 const UserSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    role: { type: String, default: 'user' }  // Añadir campo 'role' con valor por defecto 'user'
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -43,12 +44,28 @@ app.post('/register', async (req, res) => {
         if (!username || !password) return res.status(400).json({ error: 'Faltan datos' });
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, password: hashedPassword });
+        const newUser = new User({ username, password: hashedPassword, role: 'user' });  // Usuario normal por defecto
 
         await newUser.save();
         res.status(201).json({ message: '✅ Usuario registrado' });
     } catch (error) {
         res.status(500).json({ error: '❌ Error en el registro' });
+    }
+});
+
+// Ruta para crear administrador directamente en la base de datos
+app.post('/create-admin', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username || !password) return res.status(400).json({ error: 'Faltan datos' });
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newAdmin = new User({ username, password: hashedPassword, role: 'admin' });  // Crear admin directamente
+
+        await newAdmin.save();
+        res.status(201).json({ message: '✅ Administrador creado' });
+    } catch (error) {
+        res.status(500).json({ error: '❌ Error al crear administrador' });
     }
 });
 
@@ -64,7 +81,7 @@ app.post('/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ error: '❌ Contraseña incorrecta' });
 
-        req.session.user = { username };  // Guardar usuario en sesión
+        req.session.user = { username, role: user.role };  // Guardar usuario y rol en sesión
         res.json({ message: '✅ Login exitoso' });
     } catch (error) {
         res.status(500).json({ error: '❌ Error en el login' });
@@ -76,7 +93,7 @@ app.get('/user-info', (req, res) => {
     if (!req.session.user) {
         return res.status(401).json({ error: 'No autenticado' });
     }
-    res.json({ username: req.session.user.username });
+    res.json({ username: req.session.user.username, role: req.session.user.role });  // Enviar también el rol
 });
 
 // Ruta de logout
