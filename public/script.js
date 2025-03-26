@@ -21,10 +21,9 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
     // Mostrar el mensaje de éxito o error
     if (response.ok) {
-        // Mostrar el mensaje de éxito
         document.getElementById('message').textContent = data.message || "¡Inicio de sesión exitoso!";
         document.getElementById('message').style.display = 'block'; // Mostrar mensaje
-
+    
         // Redirigir según el rol del usuario
         if (data.role === 'admin') {
             window.location.href = 'dashboardadmin.html'; // Redirigir a dashboard de administrador
@@ -32,8 +31,8 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             window.location.href = 'dashboard.html'; // Redirigir a dashboard normal
         }
     } else {
-        // Mostrar el mensaje de error
         document.getElementById('errorMessage').textContent = data.error || "❌ Error al iniciar sesión";
         document.getElementById('errorMessage').style.display = 'block'; // Mostrar mensaje de error
     }
+    
 });

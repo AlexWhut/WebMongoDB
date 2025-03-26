@@ -81,12 +81,17 @@ app.post('/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ error: '❌ Contraseña incorrecta' });
 
-        req.session.user = { username, role: user.role };  // Guardar usuario y rol en sesión
-        res.json({ message: '✅ Login exitoso' });
+        // Guardar usuario y rol en la sesión
+        req.session.user = { username, role: user.role }; 
+
+        // Enviar respuesta con el rol para el redireccionamiento correcto
+        res.json({ message: '✅ Login exitoso', role: user.role });
     } catch (error) {
         res.status(500).json({ error: '❌ Error en el login' });
     }
 });
+
+
 
 // Ruta para obtener info del usuario autenticado
 app.get('/user-info', (req, res) => {
