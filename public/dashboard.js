@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const usernameElement = document.getElementById("username");
-    
+
     // Verificar si el usuario está autenticado
     const response = await fetch("/user-info");
     const data = await response.json();
-    
+
     if (data.username) {
         usernameElement.textContent = `Bienvenido, ${data.username}`;
     } else {
