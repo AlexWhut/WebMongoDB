@@ -6,9 +6,9 @@ const saltRounds = 10;
 const UserSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    birthdate: { type: Date, required: true }, 
-    role: { type: String, default: 'user' }
+    role: { type: String, default: 'user' }  
 });
+
 
 // Middleware para encriptar la contraseña antes de guardar
 UserSchema.pre('save', async function (next) {
