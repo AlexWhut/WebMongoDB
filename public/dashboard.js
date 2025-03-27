@@ -1,30 +1,33 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const usernameElement = document.getElementById("username");
-    
+
     try {
         // Verificar si el usuario está autenticado
-        const response = await fetch("/user-info");
+        const response = await fetch("/user-info", { credentials: "include" });
 
-        if (!response.ok) {
-            throw new Error("No autenticado");
+        if (response.status === 401) {
+            console.warn("Sesión no encontrada. Redirigiendo...");
+            return (window.location.href = "index.html"); // Redirigir si no hay sesión
         }
 
-        const data = await response.json();
+        if (!response.ok) throw new Error("Error en la respuesta del servidor");
 
+        const data = await response.json();
         if (data.username) {
             usernameElement.textContent = `Bienvenido, ${data.username}`;
         } else {
-            throw new Error("No se encontró el usuario en la sesión");
+            console.warn("Usuario no autenticado");
+            window.location.href = "index.html"; 
         }
     } catch (error) {
         console.error("Error al obtener la información del usuario:", error);
-        window.location.href = "index.html"; // Redirigir si no hay sesión
+        window.location.href = "index.html"; // Redirigir solo en caso de error grave
     }
 
     // Logout
     document.getElementById("logoutBtn").addEventListener("click", async () => {
         try {
-            const logoutResponse = await fetch("/logout", { method: "POST" });
+            const logoutResponse = await fetch("/logout", { method: "POST", credentials: "include" });
             if (logoutResponse.ok) {
                 window.location.href = "index.html";
             } else {
