@@ -34,5 +34,4 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         document.getElementById('errorMessage').textContent = data.error || "❌ Error al iniciar sesión";
         document.getElementById('errorMessage').style.display = 'block'; // Mostrar mensaje de error
     }
-    
 });

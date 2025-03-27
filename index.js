@@ -29,14 +29,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .catch(err => console.error('❌ Error al conectar a MongoDB:', err));
 
 // Modelo de Usuario
-const UserSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    birthdate: { type: Date },  // Se almacena pero no se usa para autenticación
-    role: { type: String, default: 'user' }
-});
-
-const User = mongoose.model('User', UserSchema);
+const User = require('./models/user');
 
 // Ruta de registro
 app.post('/register', async (req, res) => {
@@ -44,6 +37,11 @@ app.post('/register', async (req, res) => {
         const { username, password, birthdate } = req.body;
         if (!username || !password) 
             return res.status(400).json({ error: 'Usuario y contraseña son obligatorios' });
+
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: 'El nombre de usuario ya está registrado' });
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ username, password: hashedPassword, birthdate });
@@ -66,10 +64,34 @@ app.post('/login', async (req, res) => {
         }
 
         req.session.userId = user._id;
-        res.json({ message: '✅ Autenticado correctamente' });
+        res.json({ message: '✅ Autenticado correctamente', role: user.role });
     } catch (error) {
         res.status(500).json({ error: '❌ Error en la autenticación' });
     }
+});
+
+// Ruta para obtener información del usuario autenticado
+app.get('/user-info', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: 'Usuario no autenticado' });
+    }
+
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+        return res.status(401).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({ username: user.username });
+});
+
+// Ruta de logout
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error al cerrar sesión' });
+        }
+        res.json({ message: '✅ Sesión cerrada correctamente' });
+    });
 });
 
 app.listen(PORT, () => console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`));
