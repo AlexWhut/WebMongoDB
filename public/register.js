@@ -7,7 +7,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     // Validar el nombre de usuario
     const usernameRegex = /^[a-z0-9._]{1,12}$/;
     if (!usernameRegex.test(username)) {
-        document.getElementById('registerErrorMessage').textContent = "❌ Usuario inválido. Usa solo letras minúsculas, números, '.' y '_'. Máximo 12 caracteres.";
+        document.getElementById('registerErrorMessage').textContent = "Usuario inválido. No usar espacios o simbolos";
         document.getElementById('registerErrorMessage').style.display = 'block';
         return;
     }
