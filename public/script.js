@@ -31,7 +31,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             window.location.href = 'dashboard.html'; 
         }
     } else {
-        document.getElementById('errorMessage').textContent = data.error || "❌ Error al iniciar sesión";
+        document.getElementById('errorMessage').textContent = data.error || "Error al iniciar sesión";
         document.getElementById('errorMessage').style.display = 'block';
     }
 });
