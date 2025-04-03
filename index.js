@@ -47,9 +47,9 @@ app.post('/register', async (req, res) => {
         const newUser = new User({ username, password: hashedPassword, role: 'user' });  // Usuario normal por defecto
 
         await newUser.save();
-        res.status(201).json({ message: '✅ Usuario registrado' });
+        res.status(201).json({ message: 'Usuario registrado' });
     } catch (error) {
-        res.status(500).json({ error: '❌ Error en el registro' });
+        res.status(500).json({ error: 'Error en el registro' });
     }
 });
 
@@ -63,9 +63,9 @@ app.post('/create-admin', async (req, res) => {
         const newAdmin = new User({ username, password: hashedPassword, role: 'admin' });  // Crear admin directamente
 
         await newAdmin.save();
-        res.status(201).json({ message: '✅ Administrador creado' });
+        res.status(201).json({ message: 'Administrador creado' });
     } catch (error) {
-        res.status(500).json({ error: '❌ Error al crear administrador' });
+        res.status(500).json({ error: 'Error al crear administrador' });
     }
 });
 
@@ -76,18 +76,18 @@ app.post('/login', async (req, res) => {
         if (!username || !password) return res.status(400).json({ error: 'Faltan datos' });
 
         const user = await User.findOne({ username });
-        if (!user) return res.status(400).json({ error: '❌ Usuario no encontrado' });
+        if (!user) return res.status(400).json({ error: 'Usuario no encontrado' });
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ error: '❌ Contraseña incorrecta' });
+        if (!isMatch) return res.status(400).json({ error: 'Contraseña incorrecta' });
 
         // Guardar usuario y rol en la sesión
         req.session.user = { username, role: user.role }; 
 
         // Enviar respuesta con el rol para el redireccionamiento correcto
-        res.json({ message: '✅ Login exitoso', role: user.role });
+        res.json({ message: 'Login exitoso', role: user.role });
     } catch (error) {
-        res.status(500).json({ error: '❌ Error en el login' });
+        res.status(500).json({ error: 'Error en el login' });
     }
 });
 
@@ -104,7 +104,7 @@ app.get('/user-info', (req, res) => {
 // Ruta de logout
 app.post('/logout', (req, res) => {
     req.session.destroy(() => {
-        res.json({ message: '✅ Sesión cerrada' });
+        res.json({ message: 'Sesión cerrada' });
     });
 });
 
