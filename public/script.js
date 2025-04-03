@@ -1,8 +1,8 @@
 document.getElementById('loginForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    // Obtener los valores de los campos
-    const username = this.username.value;
+    // Convertir el usuario a minúsculas y eliminar espacios adicionales
+    const username = this.username.value.toLowerCase().trim();
     const password = this.password.value;
 
     // Hacer la solicitud POST al backend
@@ -12,7 +12,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         body: JSON.stringify({ username, password })
     });
 
-    // Obtener los datos del backend (suponiendo que el backend devuelve JSON)
+    // Obtener los datos del backend
     const data = await response.json();
 
     // Limpiar mensajes anteriores
@@ -22,17 +22,16 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     // Mostrar el mensaje de éxito o error
     if (response.ok) {
         document.getElementById('message').textContent = data.message || "¡Inicio de sesión exitoso!";
-        document.getElementById('message').style.display = 'block'; // Mostrar mensaje
-    
+        document.getElementById('message').style.display = 'block';
+
         // Redirigir según el rol del usuario
         if (data.role === 'admin') {
-            window.location.href = 'dashboardadmin.html'; // Redirigir a dashboard de administrador
+            window.location.href = 'dashboardadmin.html'; 
         } else {
-            window.location.href = 'dashboard.html'; // Redirigir a dashboard normal
+            window.location.href = 'dashboard.html'; 
         }
     } else {
         document.getElementById('errorMessage').textContent = data.error || "❌ Error al iniciar sesión";
-        document.getElementById('errorMessage').style.display = 'block'; // Mostrar mensaje de error
+        document.getElementById('errorMessage').style.display = 'block';
     }
-    
 });

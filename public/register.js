@@ -1,9 +1,18 @@
 document.getElementById('registerForm').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Evita la recarga de la página
+    event.preventDefault(); 
 
-    const username = document.getElementById('username').value;
+    let username = document.getElementById('username').value.toLowerCase().trim(); // Convertir a minúsculas
     const password = document.getElementById('password').value;
 
+    // Validar el nombre de usuario
+    const usernameRegex = /^[a-z0-9._]{1,12}$/;
+    if (!usernameRegex.test(username)) {
+        document.getElementById('registerErrorMessage').textContent = "❌ Usuario inválido. Usa solo letras minúsculas, números, '.' y '_'. Máximo 12 caracteres.";
+        document.getElementById('registerErrorMessage').style.display = 'block';
+        return;
+    }
+
+    // Hacer la solicitud POST al backend
     const response = await fetch('/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -18,11 +27,11 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 
     // Mostrar el mensaje de éxito o error
     if (response.ok) {
-        document.getElementById('registerMessage').textContent = data.message; // Mensaje de éxito
-        document.getElementById('registerMessage').style.display = 'block'; // Mostrar mensaje
-        setTimeout(() => window.location.href = 'index.html', 2000); // Redirigir después de 2 segundos
+        document.getElementById('registerMessage').textContent = data.message;
+        document.getElementById('registerMessage').style.display = 'block';
+        setTimeout(() => window.location.href = 'index.html', 2000);
     } else {
-        document.getElementById('registerErrorMessage').textContent = data.error; // Mensaje de error
-        document.getElementById('registerErrorMessage').style.display = 'block'; // Mostrar mensaje de error
+        document.getElementById('registerErrorMessage').textContent = data.error;
+        document.getElementById('registerErrorMessage').style.display = 'block';
     }
 });
