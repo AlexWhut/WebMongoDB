@@ -94,3 +94,15 @@ button:hover {
     height: auto; /* Mantiene la proporción del logo */
     margin-bottom: 20px; /* Espacio debajo del logo */
 }
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        border-radius: 0;
+        height: 100vh;
+    }
+
+    body {
+        flex-direction: column; /* Por si quieres apilar elementos en móvil */
+    }
+}
